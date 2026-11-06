@@ -1,0 +1,38 @@
+# Las credenciales NUNCA van aquí: se leen de variables de entorno o del archivo .env de la raíz (git lo ignora).
+server:
+  port: 8082
+  address: 127.0.0.1   # uso local: la API no tiene autenticación, así que no se expone a la red
+
+spring:
+  application:
+    name: appointment-service
+  config:
+    import:
+      - optional:file:../.env[.properties]
+      - optional:file:./.env[.properties]
+  datasource:
+    # trustServerCertificate: el SQL Server local usa un certificado autofirmado.
+    url: jdbc:sqlserver://${DB_HOST:localhost}:${DB_PORT:1433};databaseName=vetsync_citas;encrypt=true;trustServerCertificate=true
+    username: ${DB_USER:sa}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 5
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate   # el esquema lo gestiona Flyway, Hibernate solo lo valida
+  flyway:
+    enabled: true
+  http:
+    client:
+      # Un clinic-service caído o lento no debe dejar colgadas las peticiones de agendar.
+      connect-timeout: 2s
+      read-timeout: 5s
+
+vetsync:
+  clinic-service:
+    base-url: ${CLINIC_SERVICE_URL:http://localhost:8081}
+  agenda:
+    # Horario de atención de la clínica (franjas de 30 min dentro de este rango).
+    hora-apertura: 8
+    hora-cierre: 18

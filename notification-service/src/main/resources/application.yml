@@ -1,0 +1,37 @@
+# Las credenciales NUNCA van aquí: se leen de variables de entorno o del archivo .env de la raíz (git lo ignora).
+server:
+  port: 8083
+  address: 127.0.0.1   # uso local: la API no tiene autenticación, así que no se expone a la red
+
+spring:
+  application:
+    name: notification-service
+  config:
+    import:
+      - optional:file:../.env[.properties]
+      - optional:file:./.env[.properties]
+  datasource:
+    # trustServerCertificate: el SQL Server local usa un certificado autofirmado.
+    url: jdbc:sqlserver://${DB_HOST:localhost}:${DB_PORT:1433};databaseName=vetsync_notificaciones;encrypt=true;trustServerCertificate=true
+    username: ${DB_USER:sa}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 5
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate   # el esquema lo gestiona Flyway, Hibernate solo lo valida
+  flyway:
+    enabled: true
+  http:
+    client:
+      # Un appointment-service caído o lento no debe dejar colgada la revisión de recordatorios.
+      connect-timeout: 2s
+      read-timeout: 5s
+
+vetsync:
+  appointment-service:
+    base-url: ${APPOINTMENT_SERVICE_URL:http://localhost:8082}
+  recordatorio:
+    anticipacion-horas: 24   # se avisa cuando faltan 24 h o menos para la cita
+    intervalo: 60s           # cada cuánto se revisan las citas próximas

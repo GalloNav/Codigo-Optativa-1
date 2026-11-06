@@ -1,0 +1,26 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "clinic-service",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", ".\\mvnw.cmd", "-pl", "clinic-service", "spring-boot:run"],
+      "port": 8081,
+      "autoPort": false
+    },
+    {
+      "name": "appointment-service",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", ".\\mvnw.cmd", "-pl", "appointment-service", "spring-boot:run"],
+      "port": 8082,
+      "autoPort": false
+    },
+    {
+      "name": "notification-service",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", ".\\mvnw.cmd", "-pl", "notification-service", "spring-boot:run"],
+      "port": 8083,
+      "autoPort": false
+    }
+  ]
+}

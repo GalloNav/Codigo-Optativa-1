@@ -279,6 +279,12 @@ Tipos de prueba:
 - **Arquitectura:** `ArquitecturaTest` (ArchUnit) en cada servicio.
 - **Punta a punta:** `ClinicaEndToEndIT`, `CitasEndToEndIT` y `NotificacionesEndToEndIT`.
 
+### Integración continua
+
+El [workflow de GitHub Actions](.github/workflows/ci.yml) ejecuta la verificación completa de Maven con Java 21 en cada push y pull request. Testcontainers levanta SQL Server en Docker para las pruebas de integración, sin configurar el archivo de entorno ni arrancar Docker Compose.
+
+En GitHub, abre **Actions → CI de VetSync** para ver el resultado. Si falla, abre el paso **Ejecutar Checkstyle y todas las pruebas** para ver el error. Los informes XML que Maven genere se pueden descargar en el artefacto **informes-de-pruebas**.
+
 ## Reglas de calidad del código
 
 Las reglas obligatorias del repositorio están en [AGENTS.md](AGENTS.md). Las marcadas como automáticas las verifica `mvn verify`; si el build falla por ellas, se corrige el código, no la configuración de Checkstyle ni las pruebas de arquitectura. Resumen:
